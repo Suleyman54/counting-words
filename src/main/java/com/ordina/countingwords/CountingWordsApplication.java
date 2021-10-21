@@ -10,6 +10,5 @@ public class CountingWordsApplication {
 		SpringApplication.run(CountingWordsApplication.class, args);
 	}
 
-	//testcomment2
 
 }
