@@ -1,8 +1,9 @@
 package com.ordina.countingwords.model;
 
 public class WordFrequency {
-    public String word;
-    public int frequency;
+
+    private final String word;
+    private final int frequency;
 
     public WordFrequency(String word, int frequency) {
         this.word = word;
@@ -13,15 +14,8 @@ public class WordFrequency {
         return word;
     }
 
-    public void setWord(String word) {
-        this.word = word;
-    }
-
     public int getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
-    }
 }
