@@ -1,9 +1,10 @@
 package com.ordina.countingwords.config;
 
 import com.ordina.countingwords.controller.WordFrequencyController;
-import jakarta.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.context.annotation.Configuration;
+
+import javax.ws.rs.ApplicationPath;
 
 @Configuration
 @ApplicationPath("/api")
