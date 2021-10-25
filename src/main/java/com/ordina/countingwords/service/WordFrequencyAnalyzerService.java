@@ -2,72 +2,72 @@ package com.ordina.countingwords.service;
 
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.ordina.countingwords.model.WordFrequency;
 
 @Service
 public class WordFrequencyAnalyzerService implements WordFrequencyAnalyzer {
 
-    //CalculateHighestFrequency should return the highest frequency in the text (several
-    //words might have this frequency)
     @Override
     public int calculateHighestFrequency(String text) {
-        if (text == null || text.isEmpty())
+        if (text == null || text.isEmpty()) {
             return 0;
-
-        String[] words = text.split("\\s+[a-zA-Z]");
-
-        int finalCount = 0;
-        int tempCount = 0;
-
-        String highestFrequency = null;
-
-        for (String word : words) {
-            tempCount = 0;
-            for (String w : words) {
-                if (word.equalsIgnoreCase(w)) {
-                    tempCount++;
-                }
-            }
-            if (tempCount >= finalCount) {
-                finalCount = tempCount;
-                highestFrequency = word;
-            }
         }
 
-        return finalCount;
+        Map<String, Integer> words = countWords(text);
+        return Collections.max(words.values());
     }
 
     @Override
     public int calculateFrequencyForWord(String text, String word) {
-        String[] splittedWords = text.split("\\s+");
+        if (text == null || text.isEmpty() || word == null || word.isEmpty())
+            return 0;
 
-        int count = 0;
-        for (int i = 0; i < splittedWords.length; i++) {
-            String splittedWord = splittedWords[i];
-
-            if (!splittedWord.matches(".*\\d.*")) {
-
-                if (word.equalsIgnoreCase(splittedWord)) {
-                    count++;
-                }
-
-            }
-        }
-        return count;
+        return countWords(text)
+                .getOrDefault(word, 0);
     }
 
-    // something like this but then in Java
-    //def count_occurrences(word, sentence):
-    //return sentence.lower().split().count(word)
     @Override
     public List<WordFrequency> calculateMostFrequentNWords(String text, int limit) {
-        Map<String, Integer> myMap = new HashMap<String, Integer>();
+        if (text == null || text.isEmpty() || limit <= 0) {
+            return Collections.emptyList();
+        }
 
+        Map<String, Integer> words = countWords(text);
         List<WordFrequency> wordFrequencies = new ArrayList<>();
-        wordFrequencies.add(new WordFrequency("hello", 1));
 
+        for (Entry<String, Integer> entry : words.entrySet()){
+            wordFrequencies.add(new WordFrequency(entry.getKey(), entry.getValue()));
+        }
+
+        wordFrequencies.sort(Comparator.comparing(WordFrequency::getWord));
+        wordFrequencies.sort(Comparator.comparingInt(WordFrequency::getFrequency).reversed());
         return wordFrequencies;
     }
+
+    private Map<String, Integer> countWords(String text){
+        Map<String,Integer> wordsToFrequency = new HashMap<>();
+
+        String[] splittedWords = text.split("\\s");
+        for (String splittedWord : splittedWords) {
+            if (!splittedWord.matches(".*\\d.*")) {
+                String word = splittedWord.toLowerCase();
+
+                if (wordsToFrequency.containsKey(word)) {
+                    wordsToFrequency.put(word, wordsToFrequency.get(word) + 1);
+                } else {
+                    wordsToFrequency.put(word, 1);
+                }
+            }
+        }
+        return wordsToFrequency;
+    }
+
 }
