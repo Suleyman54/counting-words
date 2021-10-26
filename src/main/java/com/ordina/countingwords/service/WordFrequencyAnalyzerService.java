@@ -31,7 +31,7 @@ public class WordFrequencyAnalyzerService implements WordFrequencyAnalyzer {
             return 0;
 
         return countWords(text)
-                .getOrDefault(word, 0);
+                .getOrDefault(word.toLowerCase(), 0);
     }
 
     @Override
@@ -49,7 +49,8 @@ public class WordFrequencyAnalyzerService implements WordFrequencyAnalyzer {
 
         wordFrequencies.sort(Comparator.comparing(WordFrequency::getWord));
         wordFrequencies.sort(Comparator.comparingInt(WordFrequency::getFrequency).reversed());
-        return wordFrequencies;
+
+        return wordFrequencies.subList(0, limit);
     }
 
     private Map<String, Integer> countWords(String text){

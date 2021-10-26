@@ -20,9 +20,7 @@ public class WordFrequency {
 
     @Override
     public String toString() {
-        return "WordFrequency{" +
-                "word='" + word + '\'' +
-                ", frequency=" + frequency +
+        return "{" + word + ", " + frequency +
                 '}';
     }
 }
